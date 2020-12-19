@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using CognineSales.Interface;
@@ -71,34 +72,34 @@ namespace CognineSales.Repository
             else
                 return false;
         }
-        public async Task CreateAuthenticationTicket(Login user)
-        {
-            var key = Encoding.ASCII.GetBytes(SiteKeys.Token);
-            var JWToken = new JwtSecurityToken(
-            issuer: SiteKeys.WebSiteDomain,
-            audience: SiteKeys.WebSiteDomain,
-            claims: GetUserClaims(user),
-            notBefore: new DateTimeOffset(DateTime.Now).DateTime,
-            expires: new DateTimeOffset(DateTime.Now.AddDays(1)).DateTime,
-            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        );
+        //public async Task CreateAuthenticationTicket(Login user)
+        //{
+        //    var key = Encoding.ASCII.GetBytes(SiteKeys.Token);
+        //    var JWToken = new JwtSecurityToken(
+        //    issuer: SiteKeys.WebSiteDomain,
+        //    audience: SiteKeys.WebSiteDomain,
+        //    claims: GetUserClaims(user),
+        //    notBefore: new DateTimeOffset(DateTime.Now).DateTime,
+        //    expires: new DateTimeOffset(DateTime.Now.AddDays(1)).DateTime,
+        //    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        //);
 
-            var token = new JwtSecurityTokenHandler().WriteToken(JWToken);
-            HttpContext.Session.SetString("JWToken", token);
-        }
+        //    var token = new JwtSecurityTokenHandler().WriteToken(JWToken);
+        //    HttpContext.Session.SetString("JWToken", token);
+        //}
 
 
-        private IEnumerable<Claim> GetUserClaims(Login user)
-        {
-            List<Claim> claims = new List<Claim>();
-            Claim _claim;
-            _claim = new Claim(ClaimTypes.Name, user.UserEmail);
-            claims.Add(_claim);
+        //private IEnumerable<Claim> GetUserClaims(Login user)
+        //{
+        //    List<Claim> claims = new List<Claim>();
+        //    Claim _claim;
+        //    _claim = new Claim(ClaimTypes.Name, user.UserEmail);
+        //    claims.Add(_claim);
 
-            _claim = new Claim("Role", Role.Admin);
-            claims.Add(_claim);
+        //    _claim = new Claim("Role", Roles.Admin);
+        //    claims.Add(_claim);
 
-            return claims.AsEnumerable<Claim>();
-        }
+        //    return claims.AsEnumerable<Claim>();
+        //}
     }
 }
