@@ -10,6 +10,8 @@ using CognineSales.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using CognineSales.Controllers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace CognineSales.Repository
 {
@@ -22,10 +24,13 @@ namespace CognineSales.Repository
         }
         public async Task<Roledata> RoleIdentity(Login login)
         {
+            
             Roledata role = new Roledata();
-            var data =await _dbContext.AllUsers.Where(x => x.Email == login.UserEmail && x.Password == login.UserPassword).Select(x => new Roledata { CustomerId=x.Id,RoleId=x.RollId }).FirstOrDefaultAsync();
-            role.CustomerId = data.CustomerId;
-            role.RoleId = data.RoleId;
+            role = await _dbContext.AllUsers.Where(x => x.Email == login.UserEmail && x.Password == login.UserPassword).Include("Roles").Select(x=> new Roledata{Email = x.Email, RoleName = x.Roles.RollName }).FirstOrDefaultAsync();
+            if(role != null)
+            {
+                return role; 
+            }
             return role; 
         }
         public async Task<bool> SaveUser(Userdata userdata)
@@ -72,34 +77,5 @@ namespace CognineSales.Repository
             else
                 return false;
         }
-        //public async Task CreateAuthenticationTicket(Login user)
-        //{
-        //    var key = Encoding.ASCII.GetBytes(SiteKeys.Token);
-        //    var JWToken = new JwtSecurityToken(
-        //    issuer: SiteKeys.WebSiteDomain,
-        //    audience: SiteKeys.WebSiteDomain,
-        //    claims: GetUserClaims(user),
-        //    notBefore: new DateTimeOffset(DateTime.Now).DateTime,
-        //    expires: new DateTimeOffset(DateTime.Now.AddDays(1)).DateTime,
-        //    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        //);
-
-        //    var token = new JwtSecurityTokenHandler().WriteToken(JWToken);
-        //    HttpContext.Session.SetString("JWToken", token);
-        //}
-
-
-        //private IEnumerable<Claim> GetUserClaims(Login user)
-        //{
-        //    List<Claim> claims = new List<Claim>();
-        //    Claim _claim;
-        //    _claim = new Claim(ClaimTypes.Name, user.UserEmail);
-        //    claims.Add(_claim);
-
-        //    _claim = new Claim("Role", Roles.Admin);
-        //    claims.Add(_claim);
-
-        //    return claims.AsEnumerable<Claim>();
-        //}
     }
 }

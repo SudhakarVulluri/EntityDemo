@@ -29,10 +29,25 @@ namespace CognineSales.Controllers
         }
         [HttpPost]
         public async Task<ActionResult> LoginPage(Login login)
-        {  
-            Roledata data = new Roledata();
-            data = await _shopping.RoleIdentity(login);
+        {
+            ClaimsIdentity identity = null;
+            Roledata data = await _shopping.RoleIdentity(login);
+            if(data!=null)
+            {
+                identity = new ClaimsIdentity(new[]
+                {
+                   new Claim(ClaimTypes.Name,data.Email),
+                   new Claim(ClaimTypes.Role,data.RoleName)
+                }, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            }
             return View();
+        }
+        public async Task<ActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("LoginPage");
         }
         public ActionResult RegistrationPage()
         {
@@ -45,8 +60,13 @@ namespace CognineSales.Controllers
             if (saving)
             {
                 bool saveCustomer = await _shopping.GetUserId(userdata);
+                ModelState.Clear();
+                return RedirectToAction("");
             }
-            return View();
+            else
+            {
+                return View("RegistrationPage");
+            } 
         }
     }
 }

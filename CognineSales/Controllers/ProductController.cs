@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CognineSales.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private ShoppingDbContext DbContext;
@@ -18,13 +17,14 @@ namespace CognineSales.Controllers
         {
             DbContext = _dbcontext;
         }
-        
+        [Authorize(Roles = "Admin")]
         public ActionResult ProductList()
         {
             var data = DbContext.Products.Include("Brands").Include("Categories").Select(x=> new ProductList {ProductId=x.ProductId,ProductName=x.ProductName,ModelYear=x.ModelYear,ListPrice=x.ListPrice,CategoryName=x.Categories.CategoryName, BrandName =x.Brands.BrandName}).ToList();
             return View(data);
 
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult AddProduct()
         {
             ViewBag.Branddata = DbContext.Brands.ToList();
@@ -45,11 +45,13 @@ namespace CognineSales.Controllers
                 return View("AddProduct");
             } 
         }
+        [Authorize(Roles = "User")]
         public ActionResult Details(int id)
         {
             var detailsdata = DbContext.Products.Include("Brands").Include("Categories").Where(x=>x.ProductId == id).Select(x => new ProductList { ProductId = x.ProductId, ProductName = x.ProductName, ModelYear = x.ModelYear, ListPrice = x.ListPrice, CategoryName = x.Categories.CategoryName, BrandName = x.Brands.BrandName }).FirstOrDefault();
             return View(detailsdata);
         }
+        [Authorize(Roles = "Staff")]
         public ActionResult EditProduct(int Productid)
         {
             ViewBag.Branddata = DbContext.Brands.ToList();

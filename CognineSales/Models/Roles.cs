@@ -9,7 +9,6 @@ namespace CognineSales.Models
 {
     public class Roles
     {
-        public static ClaimsIdentity Admin { get; internal set; }
         [Key]
         public int Id { get; set; }
         public string RollName { get; set; }
