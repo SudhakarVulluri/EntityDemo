@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "UserPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (User.Identity.IsAuthenticated && User.Identity.Name!=null)
+{
+    <h1>UserPage</h1>
+    @if (User.IsInRole("User"))
+    {
+        @User.Claims.ElementAt(2).Value
+        <p>User</p>
+    }
+    @if (User.IsInRole("Admin"))
+    {
+        <p>Admin</p>
+    }
+    @if (User.IsInRole("Staff"))
+    {
+        <p>Admin</p>
+    }
+    @if (User.IsInRole("Store"))
+    {
+        <p>Admin</p>
+    }
+}

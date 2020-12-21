@@ -26,7 +26,7 @@ namespace CognineSales.Repository
         {
             
             Roledata role = new Roledata();
-            role = await _dbContext.AllUsers.Where(x => x.Email == login.UserEmail && x.Password == login.UserPassword).Include("Roles").Select(x=> new Roledata{Email = x.Email, RoleName = x.Roles.RollName }).FirstOrDefaultAsync();
+            role = await _dbContext.AllUsers.Where(x => x.Email == login.UserEmail && x.Password == login.UserPassword).Include("Roles").Select(x=> new Roledata{Name = x.Name, RoleName = x.Roles.RollName,Email = x.Email }).FirstOrDefaultAsync();
             if(role != null)
             {
                 return role; 

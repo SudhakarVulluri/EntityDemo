@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 using CognineSales.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CognineSales.Controllers
 {
@@ -37,10 +38,12 @@ namespace CognineSales.Controllers
                 identity = new ClaimsIdentity(new[]
                 {
                    new Claim(ClaimTypes.Name,data.Email),
-                   new Claim(ClaimTypes.Role,data.RoleName)
+                   new Claim(ClaimTypes.Role,data.RoleName),
+                   new Claim(ClaimTypes.Email,data.Name)
                 }, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                var user = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
+                return RedirectToAction("UserPage", "User");
             }
             return View();
         }

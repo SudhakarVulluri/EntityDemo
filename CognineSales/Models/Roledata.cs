@@ -8,6 +8,7 @@ namespace CognineSales.Models
     public class Roledata
     {
         public string RoleName { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
     }
 }
