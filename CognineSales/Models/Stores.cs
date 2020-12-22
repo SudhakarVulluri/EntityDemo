@@ -13,7 +13,9 @@ namespace CognineSales.Models
         [ForeignKey("AllUsers")]
         public int StoreId { get; set; }
         public AllUsers AllUsers { get; set; }
+        [Required]
         public string Name { get; set; }
+        public bool IsActive { get; set; }
         public List<Orders> Orders { get; set; }
         public List<Staff> Staff { get; set; }
     }

@@ -81,9 +81,9 @@ namespace CognineSales.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "VARCHAR(40)", nullable: false),
+                    Email = table.Column<string>(type: "VARCHAR(50)", nullable: false),
+                    Password = table.Column<string>(type: "VARCHAR(20)", nullable: false),
                     RollId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -102,8 +102,8 @@ namespace CognineSales.Migrations
                 columns: table => new
                 {
                     CustomerId = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "VARCHAR(30)", nullable: false),
+                    LastName = table.Column<string>(type: "VARCHAR(30)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Phone = table.Column<long>(type: "bigint", nullable: false),
@@ -129,7 +129,8 @@ namespace CognineSales.Migrations
                 columns: table => new
                 {
                     StoreId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Phone = table.Column<long>(type: "bigint", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -153,9 +154,9 @@ namespace CognineSales.Migrations
                 columns: table => new
                 {
                     StaffId = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "VARCHAR(30)", nullable: false),
+                    LastName = table.Column<string>(type: "VARCHAR(30)", nullable: false),
+                    Gender = table.Column<string>(type: "VARCHAR(10)", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     ManagerId = table.Column<int>(type: "int", nullable: true),
                     StoreId = table.Column<int>(type: "int", nullable: false),
@@ -280,6 +281,32 @@ namespace CognineSales.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Brands",
+                columns: new[] { "BrandId", "BrandName" },
+                values: new object[,]
+                {
+                    { 1, "Levis" },
+                    { 2, "Denim" },
+                    { 3, "Realme" },
+                    { 4, "Redmi" },
+                    { 5, "LG" },
+                    { 6, "Samsung" },
+                    { 7, "Asus" },
+                    { 8, "Lenovo" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CategoryId", "CategoryName" },
+                values: new object[,]
+                {
+                    { 1, "Fashion" },
+                    { 2, "Mobiles" },
+                    { 3, "HomeAppliances" },
+                    { 4, "Electronics" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "RollName" },
                 values: new object[,]
@@ -288,6 +315,92 @@ namespace CognineSales.Migrations
                     { 2, "User" },
                     { 3, "Staff" },
                     { 4, "Store" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AllUsers",
+                columns: new[] { "Id", "Email", "Name", "Password", "RollId" },
+                values: new object[,]
+                {
+                    { 4, "DMart4@gmail.com", "DMart4", "DMart42", 4 },
+                    { 2, "DMart2@gmail.com", "DMart2", "DMart24", 4 },
+                    { 1, "DMart1@gmail.com", "DMart1", "DMart12", 4 },
+                    { 8, "Staff1@Cognine.com", "Staff 2", "Staff@24", 3 },
+                    { 7, "Staff1@Cognine.com", "Staff 1", "Staff@12", 3 },
+                    { 6, "sudha@Cognine.com", "Vulluri Sudhakar", "Sudha@12", 2 },
+                    { 5, "Admin@Cognine.com", "Admin", "@dmin12", 1 },
+                    { 3, "DMart3@gmail.com", "DMart3", "DMart31", 4 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "BrandId", "CategoryId", "ListPrice", "ModelYear", "ProductName" },
+                values: new object[,]
+                {
+                    { 16, 8, 4, 9000, 2020, "LenovoGamepad" },
+                    { 15, 8, 4, 10000, 2020, "LenovoSmartWatches" },
+                    { 14, 7, 4, 60000, 2020, "Asus Tuf" },
+                    { 13, 7, 4, 35000, 2020, "Asus VivoBook14" },
+                    { 12, 6, 3, 14500, 2020, "HomeTheater" },
+                    { 10, 5, 3, 20000, 2020, "WashingMachine" },
+                    { 9, 5, 3, 12000, 2020, "AndroidTV" },
+                    { 8, 4, 2, 2500, 2020, "RedmiNote10" },
+                    { 7, 4, 2, 20000, 2020, "RedmiK20pro" },
+                    { 6, 3, 2, 12000, 2020, "RealmeNarzo20" },
+                    { 5, 3, 2, 23000, 2020, "RealmeX3" },
+                    { 4, 2, 1, 2000, 2020, "DenimShirts" },
+                    { 3, 2, 1, 999, 2020, "DenimJeans" },
+                    { 2, 1, 1, 2000, 2020, "LevisJeans" },
+                    { 11, 6, 3, 25000, 2020, "Refridgerator" },
+                    { 1, 1, 1, 999, 2020, "LevisShirts" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Customer",
+                columns: new[] { "CustomerId", "City", "Country", "FirstName", "Gender", "IsActive", "LastName", "Phone", "PinCode", "State", "Street" },
+                values: new object[] { 6, "Madhapur", "India", "Vulluri", "Male", true, "Sudhakar", 8108108101L, 500058, "Telangana", "ABC" });
+
+            migrationBuilder.InsertData(
+                table: "Stores",
+                columns: new[] { "StoreId", "City", "Country", "IsActive", "Name", "Phone", "PinCode", "State", "Street" },
+                values: new object[,]
+                {
+                    { 1, "Madhapur", "India", true, "DMart1", 8108108101L, 500058, "Telangana", "ABC" },
+                    { 2, "Madhapur", "India", true, "DMart2", 9008108102L, 500059, "Telangana", "JBL" },
+                    { 3, "Madhapur", "India", true, "DMart3", 7608108103L, 500060, "Telangana", "DEF" },
+                    { 4, "Madhapur", "India", true, "DMart4", 98108108104L, 500051, "Telangana", "XYZ" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Staff",
+                columns: new[] { "StaffId", "Active", "City", "Country", "FirstName", "Gender", "LastName", "ManagerId", "Phone", "PinCode", "State", "StoreId", "Street" },
+                values: new object[,]
+                {
+                    { 7, true, "Madhapur", "India", "Staff", "Male", "1", null, 8108108101L, 500058, "Telangana", 1, "ABC" },
+                    { 8, true, "Madhapur", "India", "DMart", "Male", "2", null, 9008108102L, 500059, "Telangana", 2, "JBL" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Stocks",
+                columns: new[] { "ProductId", "StoreId", "Quantity" },
+                values: new object[,]
+                {
+                    { 14, 4, 12 },
+                    { 13, 4, 12 },
+                    { 12, 3, 22 },
+                    { 11, 3, 32 },
+                    { 10, 3, 21 },
+                    { 9, 3, 22 },
+                    { 8, 2, 9 },
+                    { 7, 2, 8 },
+                    { 6, 2, 2 },
+                    { 5, 2, 42 },
+                    { 4, 1, 22 },
+                    { 3, 1, 15 },
+                    { 2, 1, 12 },
+                    { 1, 1, 10 },
+                    { 15, 4, 16 },
+                    { 16, 4, 19 }
                 });
 
             migrationBuilder.CreateIndex(

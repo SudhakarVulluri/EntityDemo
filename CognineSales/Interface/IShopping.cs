@@ -10,6 +10,10 @@ namespace CognineSales.Interface
     {
         Task<Roledata> RoleIdentity(Login login);
         Task<bool> SaveUser(Userdata userdata);
-        Task<bool> GetUserId(Userdata userdata);
+        Task SaveData(Userdata userdata);
+        Task SaveCustomer(Userdata userdata, int UserId);
+        Task SaveStaff(Userdata userdata, int UserId);
+        Task SaveStore(Userdata userdata, int UserId);
+
     }
 }

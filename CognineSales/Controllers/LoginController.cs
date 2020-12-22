@@ -24,7 +24,7 @@ namespace CognineSales.Controllers
             _shopping = shopping;
         }
         [AllowAnonymous]
-        public ActionResult LoginPage()
+        public IActionResult LoginPage()
         {
             return View();
         }
@@ -33,19 +33,27 @@ namespace CognineSales.Controllers
         {
             ClaimsIdentity identity = null;
             Roledata data = await _shopping.RoleIdentity(login);
+
             if(data!=null)
             {
                 identity = new ClaimsIdentity(new[]
                 {
                    new Claim(ClaimTypes.Name,data.Email),
                    new Claim(ClaimTypes.Role,data.RoleName),
-                   new Claim(ClaimTypes.Email,data.Name)
+                   new Claim(ClaimTypes.Email,data.Name),
+                   new Claim(ClaimTypes.MobilePhone,Convert.ToString(data.Id))
                 }, CookieAuthenticationDefaults.AuthenticationScheme);
                 var user = new ClaimsPrincipal(identity);
+
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
                 return RedirectToAction("UserPage", "User");
             }
-            return View();
+            else
+            {
+                ViewBag.Error = "Email or password is incorrect";
+                return View();
+            }
+            
         }
         public async Task<ActionResult> Logout()
         {
@@ -54,6 +62,7 @@ namespace CognineSales.Controllers
         }
         public ActionResult RegistrationPage()
         {
+            ViewBag.ManagerList = _dbContext.Staff.Where(x => x.ManagerId == null && x.StoreId == Convert.ToInt32(User.Claims.ElementAt(3).Value)).Include("AllUsers").Select(x => new { x.StaffId, x.AllUsers.Name }).ToList();
             return View();
         }
         [HttpPost]
@@ -62,9 +71,9 @@ namespace CognineSales.Controllers
             bool saving = await _shopping.SaveUser(userdata);
             if (saving)
             {
-                bool saveCustomer = await _shopping.GetUserId(userdata);
+                await _shopping.SaveData(userdata);
                 ModelState.Clear();
-                return RedirectToAction("");
+                return RedirectToAction("LoginPage");
             }
             else
             {

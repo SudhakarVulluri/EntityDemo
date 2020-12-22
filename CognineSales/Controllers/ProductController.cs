@@ -17,14 +17,13 @@ namespace CognineSales.Controllers
         {
             DbContext = _dbcontext;
         }
-        [Authorize(Roles = "Admin")]
         public ActionResult ProductList()
         {
             var data = DbContext.Products.Include("Brands").Include("Categories").Select(x=> new ProductList {ProductId=x.ProductId,ProductName=x.ProductName,ModelYear=x.ModelYear,ListPrice=x.ListPrice,CategoryName=x.Categories.CategoryName, BrandName =x.Brands.BrandName}).ToList();
             return View(data);
 
         }
-        [Authorize(Roles = "Admin")]
+  
         public ActionResult AddProduct()
         {
             ViewBag.Branddata = DbContext.Brands.ToList();

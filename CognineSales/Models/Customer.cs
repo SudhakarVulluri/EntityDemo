@@ -13,7 +13,11 @@ namespace CognineSales.Models
         [ForeignKey("AllUsers")]
         public int CustomerId { get; set; }
         public AllUsers AllUsers { get; set; }
+        [Required(ErrorMessage ="Firstname is required")]
+        [Column(TypeName = "VARCHAR(30)")]
         public string FirstName { get; set; }
+        [Required(ErrorMessage = "Lastname is required")]
+        [Column(TypeName = "VARCHAR(30)")]
         public string LastName { get; set; }
         [Required(ErrorMessage = "Gender is required")]
         [StringLength(10)]

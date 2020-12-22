@@ -6,16 +6,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using CognineSales.Models;
 
 namespace CognineSales.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private ShoppingDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ShoppingDbContext db)
         {
             _logger = logger;
+            _dbContext = db;
         }
 
         public IActionResult Index()

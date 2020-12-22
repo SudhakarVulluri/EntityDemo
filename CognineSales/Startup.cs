@@ -32,6 +32,7 @@ namespace CognineSales
             services.AddControllersWithViews();
             services.AddDbContext<ShoppingDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("ShoppingDatabase")));
             services.AddScoped<IShopping, Shopping>();
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
